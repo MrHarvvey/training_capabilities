@@ -25,9 +25,10 @@ class connect:
 
     def print_column(self, table):
         return self.cursor.execute(f"SELECT * FROM {table}").description
-    def search_data(self, table):
-        return self.cursor.execute(f"SELECT * FROM {table} WHERE url LIKE www.google.p").fetchmany(4)
-
+    def search_data(self, table, what_to_search):
+        return self.cursor.execute(f"SELECT * FROM {table} WHERE adres_email LIKE '%{what_to_search}%'").fetchone()
+    def search_all_data(self, table, what_to_search):
+        return self.cursor.execute(f"SELECT * FROM {table} WHERE adres_email LIKE '%{what_to_search}%'").fetchall()
 
 def list_check(list):
     if len(list) < 5:
