@@ -16,7 +16,7 @@ def add_at_number():
     number = int(input("Wpisz numer na liście studenta"))
     student = input("Wpisz nazwę studenta ")
     if number > 0:
-        list_of_students.index ((number - 1), student)
+        list_of_students.insert((number - 1), student)
     else:
         print('Musisz wpisac liczbę większą od 0 ')
 
