@@ -57,5 +57,7 @@ print(se2 == se1)
 print(se1.age_salary(24))
 print(SoftwareEnginer.age_salary(34))
 
+se1.woda = "323"
 
+print(se1.woda)
 #metoda specjalna
