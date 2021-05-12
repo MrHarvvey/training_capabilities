@@ -1,12 +1,12 @@
 from django.shortcuts import render
 
-# Create your views here.
+from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
 import json
 from .models import *
 from django.http import JsonResponse
 import datetime
-
+from rest_framework.response import Response
 
 my_dick = {
   "data_list": [
@@ -15,11 +15,11 @@ my_dick = {
   ]
 }
 
-
+@csrf_exempt
 def zadanie1(request):
-    data = request.data
-    return request.data
-
+#    data = request.data
+    return Response(my_dick)
+@csrf_exempt
 def zadanie2(request):
-    data = request.data
-    return request.data
+#    data = request.data
+    return my_dick
