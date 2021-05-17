@@ -1,12 +1,8 @@
-from django.shortcuts import render
-
 from django.views.decorators.csrf import csrf_exempt
-from django.shortcuts import render
-import json
-from .models import *
 from django.http import JsonResponse
-import datetime
+
 from rest_framework.response import Response
+from rest_framework.response import api_view
 
 my_dick = {
   "data_list": [
@@ -15,11 +11,16 @@ my_dick = {
   ]
 }
 
+
+@api_view
 @csrf_exempt
 def zadanie1(request):
 #    data = request.data
-    return Response(my_dick)
+    return JsonResponse(my_dick)
+
+
+@api_view
 @csrf_exempt
 def zadanie2(request):
 #    data = request.data
-    return my_dick
+    return JsonResponse(my_dick)
