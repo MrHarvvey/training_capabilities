@@ -1,8 +1,7 @@
-from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse
-
 from rest_framework.response import Response
-from rest_framework.response import api_view
+from rest_framework.decorators import api_view
+from .serializers import PeopleSerializers
+from rest_framework.views import APIView
 
 my_dick = {
   "data_list": [
@@ -11,16 +10,6 @@ my_dick = {
   ]
 }
 
-
-@api_view
-@csrf_exempt
-def zadanie1(request):
-#    data = request.data
-    return JsonResponse(my_dick)
-
-
-@api_view
-@csrf_exempt
-def zadanie2(request):
-#    data = request.data
-    return JsonResponse(my_dick)
+class PeopleAPIView(APIView):
+    serializers = PeopleSerializers
+_dick)
