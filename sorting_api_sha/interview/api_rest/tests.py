@@ -26,13 +26,16 @@ data = {
 
 #print(req.text)
 
+req = requests.post("http://127.0.0.1:8001/zadanie4/", data=json.dumps(data), headers=headers)
+
+print(req.text)
 
 def download_bitcoin_costs():
   try:
     req = requests.get("https://bitbay.net/API/Public/BTCPLN/orderbook.json")
   except:
     return "nie udało się pobrac danych"
-  return req.text
+  return req.json()
 
 
 def recalculate(dane):
@@ -43,10 +46,10 @@ def recalculate(dane):
     for item in dane:
       total_btc += int(item[1])
       total_btc_price += int(item[0])
-  except:
-    return "nie udalo sie obliczyc"
-  return total_btc, total_btc_price
+    btc_price = total_btc_price/total_btc
+  except Exception as e:
+    return e
+  return float(btc_price)
 
-#print(download_bitcoin_costs())
 
-print(recalculate(download_bitcoin_costs()))
+#print(recalculate(download_bitcoin_costs()))

@@ -5,6 +5,9 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
 import hashlib
+import requests
+
+
 
 class PeopleAPIView(generics.ListAPIView):
     queryset = People.objects.all()
@@ -68,7 +71,43 @@ def safe_people2(request):
         return Response(new_dick, status=status.HTTP_201_CREATED)
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
+def download_bitcoin_costs():
+  try:
+    req = requests.get("https://bitbay.net/API/Public/BTCPLN/orderbook.json")
+  except:
+    return "nie udało się pobrac danych"
+  return req.json()
+
+
+def recalculate(dane):
+  try:
+    dane = dane['bids']
+    total_btc = 0
+    total_btc_price = 0
+    for item in dane:
+      total_btc += int(item[1])
+      total_btc_price += int(item[0])
+    btc_price = total_btc_price/total_btc
+  except Exception as e:
+    return e
+  return float(btc_price)
+
+
+
+
 @api_view(['POST'])
 def bitcoin_cost(request):
     if request.method == 'POST':
-        req = request.data
+        my_data = request.data
+        try:
+            value_bitcoin = my_data['buy']
+            print(value_bitcoin)
+            print(recalculate(download_bitcoin_costs()))
+            price = int(value_bitcoin) * int(recalculate(download_bitcoin_costs()))
+            print(price)
+            new_dick = {'price': str(price)}
+            print(new_dick)
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        return Response(new_dick, status=status.HTTP_201_CREATED)
+
