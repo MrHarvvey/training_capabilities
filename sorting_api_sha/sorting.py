@@ -1,5 +1,4 @@
 import hashlib
-import json
 
 class Postac:
     def __init__(self, first_name, second_name, birth_date):
@@ -11,17 +10,12 @@ class Postac:
         hex_dig = hash_object.hexdigest()
         self.hash = hex_dig
 
-    # def calc_hash(self):
-    #     string_ob = self.first_name + self.second_name + self.birth_date
-    #     hash_object = hashlib.sha256(string_ob.encode())
-    #     hex_dig = hash_object.hexdigest()
-    #     self.hash = hex_dig
-    #     return hex_dig
     def __repr__(self):
         return '({}, {}, {}, {})'.format(self.first_name, self.second_name, self.birth_date, self.hash)
 
 
 def sorting(persons):
+    # sorting claas object by first_name
     sorteda = sorted(persons, key=lambda e: e.first_name)
     return sorteda
 
@@ -45,5 +39,3 @@ for e in new_list:
     dick = {"first_name": e.first_name, "second_name": e.second_name, 'birth_date': e.birth_date, 'hash': e.hash}
     sorted_list.append(dick)
 new_dick = {'result': sorted_list}
-
-print(new_dick)

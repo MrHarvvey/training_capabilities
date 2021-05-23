@@ -12,23 +12,20 @@ data = {
 }
 headers = {'Content-type': 'application/json'}
 
-#req = requests.post("http://127.0.0.1:8001/zadanie3/", data=json.dumps(data), headers=headers)
+req = requests.post("http://127.0.0.1:8001/zadanie3/", data=json.dumps(data), headers=headers)
 
 # Create your tests here.
 
-data = {
+data2 = {
     "buy": "0.1234"
 }
 
+print(req.text)
 
-
-#req = requests.get("https://bitbay.net/API/Public/BTCPLN/orderbook.json")
-
-#print(req.text)
-
-req = requests.post("http://127.0.0.1:8001/zadanie4/", data=json.dumps(data), headers=headers)
+req = requests.post("http://127.0.0.1:8001/zadanie4/", data=json.dumps(data2), headers=headers)
 
 print(req.text)
+
 
 def download_bitcoin_costs():
   try:
@@ -51,5 +48,3 @@ def recalculate(dane):
     return e
   return float(btc_price)
 
-
-#print(recalculate(download_bitcoin_costs()))

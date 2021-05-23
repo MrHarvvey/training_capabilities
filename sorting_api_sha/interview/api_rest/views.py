@@ -101,13 +101,9 @@ def bitcoin_cost(request):
         my_data = request.data
         try:
             value_bitcoin = my_data['buy']
-            print(value_bitcoin)
-            print(recalculate(download_bitcoin_costs()))
-            price = int(value_bitcoin) * int(recalculate(download_bitcoin_costs()))
-            print(price)
-            new_dick = {'price': str(price)}
-            print(new_dick)
+            price = float(value_bitcoin) * float(recalculate(download_bitcoin_costs()))
+            nowy_slownik = {'price': "%.2f" % price}
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
-        return Response(new_dick, status=status.HTTP_201_CREATED)
+        return Response(nowy_slownik, status=status.HTTP_201_CREATED)
 
