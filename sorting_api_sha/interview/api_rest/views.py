@@ -71,6 +71,8 @@ def safe_people2(request):
         return Response(new_dick, status=status.HTTP_201_CREATED)
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
+
+#donloading bitcoin cost form webside
 def download_bitcoin_costs():
   try:
     req = requests.get("https://bitbay.net/API/Public/BTCPLN/orderbook.json")
@@ -78,7 +80,7 @@ def download_bitcoin_costs():
     return "nie udało się pobrac danych"
   return req.json()
 
-
+#recalculating bitcoin price
 def recalculate(dane):
   try:
     dane = dane['bids']
@@ -94,7 +96,7 @@ def recalculate(dane):
 
 
 
-
+#returning bitcoin price
 @api_view(['POST'])
 def bitcoin_cost(request):
     if request.method == 'POST':
