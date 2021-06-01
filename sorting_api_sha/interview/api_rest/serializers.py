@@ -6,3 +6,8 @@ class PeopleSerializers(serializers.ModelSerializer):
     class Meta:
         model = People
         fields = ['first_name', 'second_name', 'birth_date']
+
+class People1Serializers(serializers.ModelSerializer):
+    class Meta:
+        model = People
+        fields = ['first_name', 'second_name', 'birth_date', 'hash']

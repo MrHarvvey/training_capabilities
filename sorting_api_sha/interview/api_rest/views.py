@@ -1,4 +1,4 @@
-from .serializers import PeopleSerializers
+from .serializers import PeopleSerializers, People1Serializers
 from rest_framework import generics
 from .models import People
 from rest_framework.response import Response
@@ -16,7 +16,7 @@ class PeopleAPIView(generics.ListAPIView):
 #@csrf_exempt
 @api_view(['POST'])
 def safe_people(request):
-    print(request.data)
+    #print(request.data)
     if request.method == 'POST':
         try:
             list_elements = request.data['data_list']
@@ -28,8 +28,17 @@ def safe_people(request):
                 saveserialize = PeopleSerializers(data=item)
                 if saveserialize.is_valid():
                     saveserialize.save()
+            all_items = People.objects.all()
+            print(all_items)
+            listpeople = []
+            for people in all_items:
+                print(people)
+                serialized = People1Serializers(data=people)
+                listpeople.append(serialized)
+            dict_1 = {'result': listpeople}
 
-            return Response(saveserialize.data, status=status.HTTP_201_CREATED)
+
+            return Response(dict_1, status=status.HTTP_201_CREATED)
             return Response(saveserialize.data, status=status.HTTP_400_BAD_REQUEST)
 
 
