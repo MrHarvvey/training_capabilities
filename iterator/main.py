@@ -56,3 +56,14 @@ day2 = Day(20, 2)
 day3 = day2 + day1
 
 print(day3)
+
+def my_range(start):
+    current = start
+    while True:
+        yield current
+        current += 1
+
+nums  = my_range(1)
+
+for num in nums:
+    print(num)
