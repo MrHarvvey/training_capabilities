@@ -32,7 +32,6 @@ def safe_people(request):
             print(all_items)
             listpeople = []
             for people in all_items:
-                print(people)
                 serialized = People1Serializers(data=people)
                 listpeople.append(serialized)
             dict_1 = {'result': listpeople}
