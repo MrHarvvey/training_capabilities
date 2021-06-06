@@ -1,3 +1,5 @@
+import json
+
 from .serializers import PeopleSerializers, People1Serializers
 from rest_framework import generics
 from .models import People
@@ -29,12 +31,8 @@ def safe_people(request):
                 if saveserialize.is_valid():
                     saveserialize.save()
             all_items = People.objects.all()
-            print(all_items)
-            listpeople = []
-            for people in all_items:
-                serialized = People1Serializers(data=people)
-                listpeople.append(serialized)
-            dict_1 = {'result': listpeople}
+            serializer = People1Serializers(all_items, many=True)
+            dict_1 = {'result': serializer.data}
 
 
             return Response(dict_1, status=status.HTTP_201_CREATED)
