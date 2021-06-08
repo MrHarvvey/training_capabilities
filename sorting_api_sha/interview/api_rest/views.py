@@ -2,56 +2,42 @@ import json
 
 from .serializers import PeopleSerializers, People1Serializers
 from rest_framework import generics
-from .models import People
+from .models import People, Postac
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
+from .utils import download_bitcoin_costs as download_bitcoin_costs
+from .utils import recalculate as recalculate
+from .utils import sorting as sorting
 import hashlib
-import requests
-
-
 
 class PeopleAPIView(generics.ListAPIView):
     queryset = People.objects.all()
     serializer_class = PeopleSerializers
 
-#@csrf_exempt
 @api_view(['POST'])
-def safe_people(request):
+def safe_people_db(request):
     #print(request.data)
     if request.method == 'POST':
         try:
             list_elements = request.data['data_list']
-            print(list_elements)
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         if any(list_elements):
             for item in list_elements:
                 saveserialize = PeopleSerializers(data=item)
                 if saveserialize.is_valid():
-                    saveserialize.save()
+                    string_hash = item['first_name'] + item['second_name'] + item['birth_date']
+                    hash_object = hashlib.sha256(string_hash.encode())
+                    hex_dig = hash_object.hexdigest()
+                    new_ob = People(first_name=item['first_name'], second_name=item['second_name'], birth_date=item['birth_date'], hash=hex_dig)
+                    new_ob.save()
             all_items = People.objects.all()
             serializer = People1Serializers(all_items, many=True)
             dict_1 = {'result': serializer.data}
-
-
             return Response(dict_1, status=status.HTTP_201_CREATED)
             return Response(saveserialize.data, status=status.HTTP_400_BAD_REQUEST)
 
-
-class Postac:
-    def __init__(self, first_name, second_name, birth_date):
-        self.first_name = first_name
-        self.second_name = second_name
-        self.birth_date = birth_date
-        string_ob = self.first_name + self.second_name + self.birth_date
-        hash_object = hashlib.sha256(string_ob.encode())
-        hex_dig = hash_object.hexdigest()
-        self.hash = hex_dig
-
-def sorting(persons):
-    sorteda = sorted(persons, key=lambda e: e.first_name)
-    return sorteda
 
 @api_view(['POST'])
 def safe_people2(request):
@@ -77,31 +63,6 @@ def safe_people2(request):
         return Response(new_dick, status=status.HTTP_201_CREATED)
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
-
-#donloading bitcoin cost form webside
-def download_bitcoin_costs():
-  try:
-    req = requests.get("https://bitbay.net/API/Public/BTCPLN/orderbook.json")
-  except:
-    return "nie udało się pobrac danych"
-  return req.json()
-
-#recalculating bitcoin price
-def recalculate(dane):
-  try:
-    dane = dane['bids']
-    total_btc = 0
-    total_btc_price = 0
-    for item in dane:
-      total_btc += int(item[1])
-      total_btc_price += int(item[0])
-    btc_price = total_btc_price/total_btc
-  except Exception as e:
-    return e
-  return float(btc_price)
-
-
-
 #returning bitcoin price
 @api_view(['POST'])
 def bitcoin_cost(request):
@@ -114,4 +75,17 @@ def bitcoin_cost(request):
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         return Response(nowy_slownik, status=status.HTTP_201_CREATED)
+
+@api_view(['POST'])
+def hash_search(request):
+    if request.method == 'POST':
+        my_data = request.data
+        try:
+            hash_value = my_data['hash']
+            person = People.objects.get(hash=hash_value)
+            serializer = People1Serializers(person)
+        except People.DoesNotExist:
+            dic = {'error': 'This person does not exist'}
+            return Response(dic, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
