@@ -76,6 +76,11 @@ def bitcoin_cost(request):
 
 @api_view(['POST'])
 def hash_search(request):
+    # retuning sets with persons from database with specific hash value, example of usage curl -X POST -H "Content-Type: application/json" -d @hash.json 127.0.0.1:8000/hash_search/
+    # @hash.json body includes json:
+    # {
+    #     "hash": "02b1e82bb99249f3e32e86d219763dc62d103cb047c6c887e0e5d9b80557c637" - what hash value you want to delete (if multiple objects has the same hash botj will be deleted)
+    # }
     if request.method == 'POST':
         my_data = request.data
         try:
@@ -88,12 +93,12 @@ def hash_search(request):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 @api_view(['POST'])
-#deleting person from database with specific hash value, example of usage curl -X POST -H "Content-Type: application/json" -d @hash.json 127.0.0.1:8000/hash_del/
-#@hash.json body includes json:
-#{
-#     "hash": "02b1e82bb99249f3e32e86d219763dc62d103cb047c6c887e0e5d9b80557c637" - what hash value you want to delete (if mutliple objects has the same hash botj will be deleted)
-# }
 def hash_del(request):
+    # deleting person from database with specific hash value, example of usage curl -X POST -H "Content-Type: application/json" -d @hash.json 127.0.0.1:8000/hash_del/
+    # @hash.json body includes json:
+    # {
+    #     "hash": "02b1e82bb99249f3e32e86d219763dc62d103cb047c6c887e0e5d9b80557c637" - what hash value you want to delete (if mutliple objects has the same hash botj will be deleted)
+    # }
     if request.method == 'POST':
         my_data = request.data
         try:
@@ -109,12 +114,12 @@ def hash_del(request):
         return Response(dic, status=status.HTTP_201_CREATED)
 
 @api_view(['POST'])
-#returning list of persons from database object Person, example curl -X POST -H "Content-Type: application/json" -d @all.json 127.0.0.1:8000/list_persons/
-#@all.json body must includes json with one parameter count:
-#{
-#     "count": "10" - how many objects you want to return
-# }
 def list_persons(request):
+    # returning list of persons from database object Person, example curl -X POST -H "Content-Type: application/json" -d @all.json 127.0.0.1:8000/list_persons/
+    # @all.json body must includes json with one parameter count:
+    # {
+    #     "count": "10" - how many objects you want to return
+    # }
     if request.method == 'POST':
         my_data = request.data
         try:
