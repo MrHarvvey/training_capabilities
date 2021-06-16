@@ -17,8 +17,6 @@ class CityRecord:
         return self._data[6]
 
 
-
-
 class CSVFile:
     _data = None
     _file_name = None
@@ -26,6 +24,7 @@ class CSVFile:
     def load_file(self):
         with open(self._file_name, "r") as csv_file:
             file_data = csv.reader(csv_file, delimiter=';')
+            self._data = dict()
             for row in file_data:
                 row_obj = self._class_object(row)
                 self._data[row_obj.city_id()] = row_obj
@@ -44,16 +43,17 @@ class CSVFile:
 class CityFile(CSVFile):
     _file_name = "SIMC.csv"
     _class_object = CityRecord
-    def search_city_id(self, city_name):
+    def search_city_id(self, city_named):
         for item in self._data.items():
-            if item.city_name() == city_name:
-                return item.city_id()
+            city = item[1]
+            if city.city_name() == city_named:
+                return city.city_id()
 
 
 dane_ulicy = CityFile()
 
-CSVFile.load_file()
+dane_ulicy.load_file()
 
-searched_city = CityFile.search_city_id("Skierniewice")
+searched_city = dane_ulicy.search_city_id("Skierniewice")
 
 print(searched_city)
