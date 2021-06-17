@@ -1,9 +1,13 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
-from .utils import search_town, list_of_streets, town_list, street_xml
+from .models import CityFile, StreetFile
 
+object_city = CityFile()
+object_city.load_file()
 
+object_street = StreetFile()
+object_street.load_file()
 
 @api_view(['POST'])
 def street_search(request):
@@ -16,14 +20,14 @@ def street_search(request):
             error_bad_req = {'error': "You should use request with one parameter 'city' "}
             return Response(error_bad_req, status=status.HTTP_200_OK)
         try:
-            searched_town = search_town(town_list, searched_city)
-            if searched_town == False:
+            searched_city = object_city.search_city_id(searched_city)
+            if searched_city == None:
                 return Response(error_bad_req, status=status.HTTP_200_OK)
-            elif not list_of_streets(searched_town, street_xml):
+            elif not object_street.search_street(searched_city):
                 error_req_streets = {'error': "City does not have any streets"}
                 return Response(error_req_streets, status=status.HTTP_200_OK)
             else:
-                dict_1 = {'result': list_of_streets(searched_town, street_xml)}
+                dict_1 = {'result': object_street.search_street(searched_city)}
             return Response(dict_1, status=status.HTTP_200_OK)
         except Exception as error:
             print(error)
