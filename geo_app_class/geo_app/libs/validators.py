@@ -1,9 +1,9 @@
 import re
 import yaml
-
+from ..views import object_city
 
 class UploadErrors(Exception):
-    _file = None
+    _file = 'Validation_Errors.yaml'
     _category = None
     _errors = None
     _error_code = 'ERROR-BAD-REQ'
@@ -18,29 +18,44 @@ class UploadErrors(Exception):
 
 #jak dodac tutaj
 class Validator(UploadErrors):
-    _file = 'Validation_Errors.yaml'
     _error_code = 'ERROR-BAD-REQ'
     _category = 'errors'
     def __call__(self, *args, **kwargs):
         return UploadErrors.error_desc
 
 
-class IsCity(Validator):
+class ValCityLen(Validator):
     _error_code = "ERROR-STREET-DOES-NOT-FOUND"
-
+    max_len = 45
+    min_len = 4
     def __call__(self, value):
-        if len(value) > 20:
-            raise IsCity
+        if len(value) > ValCityLen.max_len:
+            raise ValCityLen
+        elif len(value) > ValCityLen.min_len:
+            raise ValCityLen
         return value
 
 
 
-class IsStreet(Validator):
+class ValStreetLen(Validator):
     _error_code = "ERROR-STREET-DOES-NOT-FOUND"
     def __call__(self, value):
         if len(value) < 20:
-            raise IsStreet
+            raise ValStreetLen
         return value
+
+class IsCity(Validator):
+    _error_code = "ERROR-NOT-IN-DATABASE"
+    def __call__(self, city):
+        if object_city.search_city_id(city):
+            return city
+        else:
+            raise IsCity
+
+
+
+
+
 
 
 

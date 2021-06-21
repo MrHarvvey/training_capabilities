@@ -1,7 +1,5 @@
 from django.db import models
 import csv
-import yaml
-import re
 
 class StreetRecord:
     def __init__(self, data):
@@ -12,6 +10,10 @@ class StreetRecord:
         return self._data[4]
     def street_name(self):
         return self._data[7]
+    def to_json(self):
+        return {
+            'street': self.street_name()
+        }
 
 class CityRecord:
     def __init__(self, data):
@@ -20,6 +22,10 @@ class CityRecord:
         return self._data[7]
     def city_name(self):
         return self._data[6]
+    def to_json(self):
+        return {
+            'city': self.city_name()
+        }
 
 
 class CSVFile:

@@ -2,6 +2,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
 from .models import CityFile, StreetFile
+from .libs.validators import IsCity
 
 object_city = CityFile()
 object_city.load_file()
@@ -12,12 +13,14 @@ object_street.load_file()
 @api_view(['POST'])
 def street_search(request):
     #curl -X POST -H "Content-Type: application/json" -d @towns.json 127.0.0.1:8000/street/
-    error_bad_req = {'error': "City does not exist in our database"}
+    error_bad_req = 4
     if request.method == 'POST':
         try:
             searched_city = request.data['city']
-        except:
-            error_bad_req = {'error': "You should use request with one parameter 'city' "}
+            city_validator = IsCity()
+            valued_city = city_validator(searched_city)
+        except IsCity as ex:
+            error_bad_req = {'error': ex.error_desc}
             return Response(error_bad_req, status=status.HTTP_200_OK)
         try:
             searched_city = object_city.search_city_id(searched_city)
