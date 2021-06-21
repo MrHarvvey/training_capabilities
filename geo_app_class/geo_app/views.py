@@ -10,6 +10,9 @@ object_city.load_file()
 object_street = StreetFile()
 object_street.load_file()
 
+# @api_view(['POST'])
+# def street_search2(request):
+
 @api_view(['POST'])
 def street_search(request):
     #curl -X POST -H "Content-Type: application/json" -d @towns.json 127.0.0.1:8000/street/

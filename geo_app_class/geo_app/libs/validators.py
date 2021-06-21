@@ -1,6 +1,7 @@
-import re
 import yaml
-from ..views import object_city
+from ..models import CityFile
+
+
 
 class UploadErrors(Exception):
     _file = 'Validation_Errors.yaml'
@@ -47,27 +48,12 @@ class ValStreetLen(Validator):
 class IsCity(Validator):
     _error_code = "ERROR-NOT-IN-DATABASE"
     def __call__(self, city):
+        object_city = CityFile()
+        object_city.load_file()
         if object_city.search_city_id(city):
             return city
         else:
             raise IsCity
-
-
-
-
-
-
-
-
-validacja = IsCity()
-
-
-
-try:
-    validacja("kasdkjasdkskljdasddassssssssssssssss")
-except Validator as ex:
-    print(ex.error_desc)
-
 
 
 
