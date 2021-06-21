@@ -2,39 +2,62 @@ import re
 import yaml
 
 
-class Validators(Exception):
-    pass
-
-
-class UploadYaml:
+class UploadErrors(Exception):
     _file = None
-    _what_download = None
-    def load_file(self):
+    _category = None
+    _errors = None
+    _error_code = 'ERROR-BAD-REQ'
+    error_desc = str
+    _language = 'PL'
+
+    def __init__(self):
         with open(self._file, 'r') as yaml_file:
-            try:
-                yaml_file = yaml.safe_load(yaml_file)
-                self._data = yaml_file.get(self._what_download)
-            except yaml.YAMLError as exc:
-                return exc
+            yaml_file = yaml.safe_load(yaml_file)
+            self._errors = yaml_file.get(self._category)
+            UploadErrors.error_desc = self._errors.get(self._error_code).get(self._language)
 
-
-class Validation(UploadYaml, Exception):
+#jak dodac tutaj
+class Validator(UploadErrors):
     _file = 'Validation_Errors.yaml'
-    _what_download = 'errors'
-    def search_error(self, error_code):
-        error = self._data.get(error_code).get('PL')
-        return error
-    def city_check(self, city_name):
-        if re.match("^[a-zA-Z]+$", city_name):
-            return city_name
-        else:
-            return self.search_error("ERROR-BAD-CITY")
+    _error_code = 'ERROR-BAD-REQ'
+    _category = 'errors'
+    def __call__(self, *args, **kwargs):
+        return UploadErrors.error_desc
+
+
+class IsCity(Validator):
+    _error_code = "ERROR-STREET-DOES-NOT-FOUND"
+
+    def __call__(self, value):
+        if len(value) > 20:
+            raise IsCity
+        return value
 
 
 
-pliki = Validation()
+class IsStreet(Validator):
+    _error_code = "ERROR-STREET-DOES-NOT-FOUND"
+    def __call__(self, value):
+        if len(value) < 20:
+            raise IsStreet
+        return value
 
-pliki.load_file()
 
-print(pliki.city_check("Skierniewice"))
+
+validacja = IsCity()
+
+
+
+try:
+    validacja("kasdkjasdkskljdasddassssssssssssssss")
+except Validator as ex:
+    print(ex.error_desc)
+
+
+
+
+
+
+
+
 
