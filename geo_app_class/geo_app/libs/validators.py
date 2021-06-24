@@ -63,15 +63,15 @@ class ValStreetLen(Validator):
         else:
             return value
 
-# class IsCity(Validator):
-#     _error_code = "ERROR-NOT-IN-DATABASE"
-#     def __call__(self, city):
-#         object_city = CityFile()
-#         object_city.load_file()
-#         if object_city.search_city_id(city):
-#             return city
-#         else:
-#             raise IsCity
+class IsCity(Validator):
+    _error_code = "ERROR-NOT-IN-DATABASE"
+    object_city = None
+    def __call__(self, city):
+        assert self.object_city, 'brak zainstancjonowanego objektu'
+        if self.object_city.search_city_id(city):
+            return city
+        else:
+            raise IsCity
 
 
 

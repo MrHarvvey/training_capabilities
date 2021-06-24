@@ -15,12 +15,9 @@ def validation_handling(fun):
         try:
             return fun(*args, **kwargs)
         except UploadErrors as ex:
-            return {
-                "error": {
-                    "code": ex.error_desc
-                }
-            }
+            return Response({'error': ex.error_desc}, status=status.HTTP_200_OK)
     return new_fun
+
 @api_view(['POST'])
 @validation_handling
 def street_search(request):
@@ -42,7 +39,7 @@ def street_search(request):
 #     if request.method == 'POST':
 #         try:
 #             searched_city = request.data['city']
-#             city_validator = IsCity()
+#             city_validator = IsCity(object_city=object_city)
 #             valued_city = city_validator(searched_city)
 #         except IsCity as ex:
 #             error_bad_req = {'error': ex.error_desc}
