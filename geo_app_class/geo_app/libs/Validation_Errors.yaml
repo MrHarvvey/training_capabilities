@@ -1,0 +1,29 @@
+errors:
+  ERROR-BAD-REQ:
+    PL : "Wprowadziłeś błedne dane spróbuj jeszcze raz"
+    EN : "Wprowadziłeś błedne dane spróbuj jeszcze raz"
+    RU : "Wprowadziłeś błedne dane spróbuj jeszcze raz"
+  ERROR-BAD-CITY:
+    PL : "To miasto jest błędne"
+    EN : "To miasto jest błędne"
+    RU : "To miasto jest błędne"
+  ERROR-CITY-DOES-NOT_EXIST:
+    PL : "To miasto nie istnieje"
+    EN : "To miasto nie istnieje"
+    RU : "To miasto nie istnieje"
+  ERROR-STREET-DOES-NOT-FOUND:
+    PL : "Ulice nie zostały znalezione"
+    EN : "Ulice nie zostały znalezione"
+    RU : "Ulice nie zostały znalezione"
+  ERROR-NOT-IN-DATABASE:
+    PL : "To miasto nie zostało znalezione w naszej bazie danych "
+    EN : "To miasto nie zostało znalezione w naszej bazie danych "
+    RU : "To miasto nie zostało znalezione w naszej bazie danych "
+  VALUE-IS-REQUIRED:
+    PL : "Ta wartość jest wymagana"
+    EN : "Ta wartość jest wymagana"
+    RU : "Ta wartość jest wymagana"
+  ERROR-STREETLEN:
+    PL : "Nazwa ulicy jest za długa"
+    EN : "Nazwa ulicy jest za długa"
+    RU : "Nazwa ulicy jest za długa"
