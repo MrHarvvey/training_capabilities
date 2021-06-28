@@ -34,6 +34,10 @@ class CityRecord:
     def city_name(self):
         return self._data[6]
 
+    def is_city(self):
+        if self._data[4] == '96':
+            return True
+
     def to_json(self):
         return {
             'city': self.city_name()
@@ -46,6 +50,7 @@ class CSVFile:
     _data = None
     _file_name = None
     _class_object: type
+
     def load_file(self):
         with open(self._file_name, "r") as csv_file:
             file_data = csv.reader(csv_file, delimiter=';')
