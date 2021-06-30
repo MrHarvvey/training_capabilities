@@ -1,81 +1,56 @@
 import yaml
+from django.conf import settings
 
-class UploadErrors(Exception):
-    _file = 'Validation_Errors.yaml'
-    _category = None
+
+class Validator(Exception):
     _errors = None
-    _error_code = 'ERROR-BAD-REQ'
+    _error_code = "ERROR-BAD-REQ"
+    _language = "PL"
     error_desc = str
-    _language = 'PL'
-    required = bool
 
     def __init__(self, **params):
-        with open(self._file, 'r') as yaml_file:
-            yaml_file = yaml.safe_load(yaml_file)
-            self._errors = yaml_file.get(self._category)
-            UploadErrors.error_desc = self._errors.get(self._error_code).get(self._language)
+        self._errors = settings.YAML_VALIDATION_ERRORS.errors
+        self.error_desc = self._errors.get(self._error_code).get(self._language)
         for k, v in params.items():
             if not k.startswith("_"):
                 if hasattr(self, k):
                     self.__setattr__(k, v)
 
-#jak dodac tutaj
-class Validator(UploadErrors):
-    _error_code = 'VALUE-IS-REQUIRED'
-    _category = 'errors'
-    default_value = ""
-    def _is_value(self, value):
-        return bool(value)
+
+class ValidReq(Validator):
+    _error_code = "ERROR-BAD-REQ"
+    object_city = None
 
     def __call__(self, value):
-        if not self._is_value(value):
-            if self.required:
-                raise Validator
-            else:
-                return self.default_value
-        return value
+        if value.get('city'):
+            return value.get('city')
+        else:
+            raise self
 
 
-
-class ValCityLen(Validator):
-    _error_code = "ERROR-STREET-DOES-NOT-FOUND"
+class ValLen(Validator):
+    _error_code = "STRING-VALIDATOR"
     max_len = 45
     min_len = 4
 
     def __call__(self, value):
-        if len(value) > ValCityLen.max_len:
-            raise ValCityLen
-        elif len(value) > ValCityLen.min_len:
-            raise ValCityLen
+        if len(value) > ValLen.max_len:
+            raise self
+        elif len(value) > ValLen.min_len:
+            raise self
         return value
 
-class ValStreetLen(Validator):
-    max_len = 5
-    min_len = 4
-    _error_code = "ERROR-STREETLEN"
 
-    def __call__(self, value):
-        var = super(ValStreetLen, self).__call__(value)
-        if len(value) > ValStreetLen.max_len:
-            raise ValStreetLen
-        elif len(value) < ValStreetLen.min_len:
-            raise ValStreetLen
-        else:
-            return value
-
-class IsCity(Validator):
+class IsCity(ValLen):
     _error_code = "ERROR-NOT-IN-DATABASE"
     object_city = None
+
     def __call__(self, city):
         assert self.object_city, 'brak zainstancjonowanego objektu'
         if self.object_city.search_city_id(city):
             return city
         else:
-            raise IsCity
-
-
-
-
+            return self
 
 
 
