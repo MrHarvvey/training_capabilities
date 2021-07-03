@@ -42,12 +42,13 @@ class DatabaseMok:
             name = random.choice(self.random_names)
             surname = random.choice(self.random_surnames)
 
-            account_number = ''.join(["{}".format(randint(0, 9)) for num in range(0, 24)])
-            insert = self.insert_data(age, email, name, surname, account_number)
+            account_number = ''.join(["{}".format(randint(0, 9)) for _ in range(0, 24)])
+            self.insert_data(age, email, name, surname, account_number)
 
 data = DatabaseMok()
 
 data.mok_times_data(120000)
+
 
 
 
