@@ -1,27 +1,60 @@
 import psycopg2
+import random
+from random import randint
 
-class InsertData:
+
+class DatabaseMok:
+    random_names = ['Julia', 'Marc', 'Stanisław', 'Oskar', 'Monika', 'Andzelika', 'Jurek', 'Wlodek', 'Kadzyslaw',
+                    'Wemiar']
+    random_surnames = ['Kowalski', 'Smith', 'Roberts', 'Kazmierczak', 'Zych', 'Wojciechowski', 'Marciniak']
+    random_emails = ['wertyak@wp.pl', 'sandy22@gmail.com', 'tantykat34@hotmail.com', 'bertat34@hotmail.com',
+                     'erntykat34@hotmail.com']
     # connect to the db
     _cursor = None
+
     def __init__(self):
         self._con = psycopg2.connect(
             host="172.17.0.1",
-            database="oskar_test",
+            database="postgres",
             user="postgres",
             password="somePassword")
 
         # cursor
         self._cursor = self._con.cursor()
 
-    def __call__(self, nr_rachunku, wlasciciel_rachunku, saldo, waluta):
-        self._cursor.execute("insert into rachunki_bankowe (nr_rachunku, wlasciciel_rachunku, saldo, waluta) values (%s, %s, %s, %s)", (nr_rachunku, wlasciciel_rachunku, saldo, waluta))
+    def insert_data(self, age, email, name, surname, account_number):
+
+        self._cursor.execute("insert into mok_data (age, email, name, surname, account_number) values (%s, %s, %s, %s, %s)", (age, email, name, surname, account_number))
         self._con.commit()
-        self._con.close()
+        #self._con.close()
 
-data = InsertData()
+    def __del__(self):
+        self._cursor = self._con.cursor()
 
-data(12321312214321423233, 'Monika', 4.6, 2)
+    def search_data(self):
+        self._cursor.execute("select * from mok_data ")
+        self._cursor.fetchall()
 
+    def mok_times_data(self, value):
+        for i in range(value):
+            age = randint(23, 80)
+            email = random.choice(self.random_emails)
+            name = random.choice(self.random_names)
+            surname = random.choice(self.random_surnames)
+
+            account_number = ''.join(["{}".format(randint(0, 9)) for num in range(0, 24)])
+            insert = self.insert_data(age, email, name, surname, account_number)
+
+data = DatabaseMok()
+
+data.mok_times_data(120000)
+
+
+
+
+
+
+#mok_times_data(100000)
 
 
 
