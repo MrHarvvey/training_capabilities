@@ -68,7 +68,7 @@ class IsCity(ValLen):
 
     def __call__(self, city):
         try:
-            val = ValLen.__call__(self, city)
+            val = IsCity.__call__(self, city)
         except Exception:
             raise StringValidator
         assert self.object_city, 'brak zainstancjonowanego objektu'
