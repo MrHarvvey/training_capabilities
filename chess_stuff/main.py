@@ -35,15 +35,12 @@ class Fen:
                         'a1', 'b1', 'c1', 'd1', 'e1', 'f1', 'g1']
 
     def __init__(self, **params):
+        self.fend = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
         for name, value in params.items():
             if name == 'fend':
                 self.fend = value
-            else:
-                self.fend = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
         self.start_position = []
         self.list_positions = []
-
-
         self.positions = self.fend[:-13]
         self.wP = PieceElement('P', 'w')
         self.bp = PieceElement('p', 'b')
@@ -98,28 +95,41 @@ class Fen:
 
 class Moves:
     def __init__(self):
-        self.positions =
+        self.start_position = Fen().start_position_list()
 
-    # def change_position(self, position):
-    #     self.start_position_list()
-    #     start_pos = position[0:2].lower()
-    #     stop_pos = position[2:4].lower()
-    #     for item in self.start_position:
-    #         if item.key == start_pos:
+    def current_position(self):
+        return self.start_position
 
-
-class Move():
-
-    def __init__(self):
-        self.current_position = Fen().start_position()
-
-mariola = Move()
-print(mariola.current_position)
-
+    def change_position(self, position):
+        start_pos = position[0:2].lower()
+        print(start_pos)
+        stop_pos = position[2:4].lower()
+        for item in self.start_position:
+            for key, value2 in item.items():
+                if key == start_pos:
+                    moved_obj = value2
+                    item[key] == None
+                if key == stop_pos:
+                    item[key]== moved_obj
 
 
 
-fen = "1nb1kbnr/pp1pp1pp/8/r1pq4/4PP2/1P6/1P1P1PPP/RNBQKBNR w KQk - 0 1"
-my_newfen = Fen(fen)
 
-print(my_newfen.start_position_list())
+
+ruchy = Moves()
+print(ruchy.start_position)
+ruchy.change_position('d2d4')
+print(ruchy.start_position)
+
+
+
+
+
+
+
+
+
+# fen = "1nb1kbnr/pp1pp1pp/8/r1pq4/4PP2/1P6/1P1P1PPP/RNBQKBNR w KQk - 0 1"
+# my_newfen = Fen()
+#
+# print(my_newfen.start_position_list())
