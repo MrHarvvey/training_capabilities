@@ -25,21 +25,21 @@ class Fen:
 
     fed = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
 
-    list_of_elements = ['a8', 'b8', 'c8', 'd8', 'e8', 'f8', 'g8',
-                        'a7', 'b7', 'c7', 'd7', 'e7', 'f7', 'g7',
-                        'a6', 'b6', 'c6', 'd6', 'e6', 'f6', 'g6',
-                        'a5', 'b5', 'c5', 'd5', 'e5', 'f5', 'g5',
-                        'a4', 'b4', 'c4', 'd4', 'e4', 'f4', 'g4',
-                        'a3', 'b3', 'c3', 'd3', 'e3', 'f3', 'g3',
-                        'a2', 'b2', 'c2', 'd2', 'e2', 'f2', 'g2',
-                        'a1', 'b1', 'c1', 'd1', 'e1', 'f1', 'g1']
+    list_of_elements = ['a8', 'b8', 'c8', 'd8', 'e8', 'f8', 'g8', 'h8',
+                        'a7', 'b7', 'c7', 'd7', 'e7', 'f7', 'g7', 'h7',
+                        'a6', 'b6', 'c6', 'd6', 'e6', 'f6', 'g6', 'h6',
+                        'a5', 'b5', 'c5', 'd5', 'e5', 'f5', 'g5', 'h5',
+                        'a4', 'b4', 'c4', 'd4', 'e4', 'f4', 'g4', 'h4',
+                        'a3', 'b3', 'c3', 'd3', 'e3', 'f3', 'g3', 'h3',
+                        'a2', 'b2', 'c2', 'd2', 'e2', 'f2', 'g2', 'h2',
+                        'a1', 'b1', 'c1', 'd1', 'e1', 'f1', 'g1', 'h1']
 
     def __init__(self, **params):
         self.fend = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
         for name, value in params.items():
             if name == 'fend':
                 self.fend = value
-        self.start_position = []
+        self.start_position = {}
         self.list_positions = []
         self.positions = self.fend[:-13]
         self.wP = PieceElement('P', 'w')
@@ -89,37 +89,53 @@ class Fen:
     def start_position_list(self):
         self._list_fen_values()
         for key, value in zip(self.list_of_elements, self.list_positions):
-            self.start_position.append({key: value})
+            self.start_position[key] = value
         return self.start_position
 
 
 class Moves:
     def __init__(self):
-        self.start_position = Fen().start_position_list()
+        self.curr_position = (Fen().start_position_list()).copy()
 
     def current_position(self):
-        return self.start_position
+        return self.curr_position
 
     def change_position(self, position):
         start_pos = position[0:2].lower()
-        print(start_pos)
         stop_pos = position[2:4].lower()
-        for item in self.start_position:
-            for key, value2 in item.items():
-                if key == start_pos:
-                    moved_obj = value2
-                    item[key] == None
-                if key == stop_pos:
-                    item[key]== moved_obj
+
+        for key, value in self.curr_position.items():
+            if key == start_pos:
+                moved_obj = value
+        self.curr_position[start_pos] = None
+        self.curr_position[stop_pos] = moved_obj
+        return self.curr_position
+
+    def curr_fen(self):
+        self.positions2 = ""
+
+        for ix, values in enumerate(self.curr_position.values()):
+            if ix < 8:
+                empty_pos = 0
+                if not values:
+                    if not prev_value:
+                        empty_pos += 1
+                else:
+                    self.positions2 += values
+                prev_value = values
+
+
+
 
 
 
 
 
 ruchy = Moves()
-print(ruchy.start_position)
-ruchy.change_position('d2d4')
-print(ruchy.start_position)
+# print(ruchy.curr_position)
+# ruchy.change_position('d2d4')
+# print(ruchy.curr_position)
+print(ruchy.curr_fen())
 
 
 
