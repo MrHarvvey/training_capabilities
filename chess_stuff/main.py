@@ -22,9 +22,6 @@ class PieceElement:
 
 
 class Fen:
-    parts = [8, 16, 24, 32, 40, 48, 56, 64 ]
-    fed = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
-
     list_of_elements = ['a8', 'b8', 'c8', 'd8', 'e8', 'f8', 'g8', 'h8',
                         'a7', 'b7', 'c7', 'd7', 'e7', 'f7', 'g7', 'h7',
                         'a6', 'b6', 'c6', 'd6', 'e6', 'f6', 'g6', 'h6',
@@ -113,16 +110,23 @@ class Moves:
 
     def curr_fen(self):
         self.positions2 = ""
-        for number in Fen.parts:
-
+        self.pos_temp = 0
+        self.prev_value = 0
         for ix, value in enumerate(self.curr_position.values()):
+            if ix % 8 == 0:
+                self.positions2 += "/"
+                if self.pos_temp > 0:
+                    self.positions2 += str(self.pos_temp)
+                    self.pos_temp = 0
             if not value:
                 self.pos_temp += 1
             else:
-                if self.positions > 0:
+                self.positions2 += value
+                if self.pos_temp > 0:
                     self.positions2 += str(self.pos_temp)
                     self.pos_temp = 0
-                self.positions2 += value
+            self.prev_value = value
+
         return self.positions2
 
 
