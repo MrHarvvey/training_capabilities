@@ -1,6 +1,5 @@
-# from stockfish import Stockfish
-#
-# stockfish = Stockfish("stockfish_14_linux_x64_avx2/stockfish_14_x64_avx2")
+from stockfish import Stockfish
+
 #
 # """""(pawn = "P", knight = "N", bishop = "B", rook = "R", queen = "Q" and king = "K")"""
 #
@@ -92,6 +91,10 @@ class Fen:
 
 class Moves:
     def __init__(self):
+        self.best_move = ''
+        self.stockfish = Stockfish("stockfish_14_linux_x64_avx2/stockfish_14_x64_avx2")
+        self.positions2 = ""
+        self.pos_temp = 0
         self.curr_position = (Fen().start_position_list()).copy()
 
     def current_position(self):
@@ -109,38 +112,42 @@ class Moves:
         return self.curr_position
 
     def curr_fen(self):
-        self.positions2 = ""
-        self.pos_temp = 0
-        self.prev_value = 0
         for ix, value in enumerate(self.curr_position.values()):
-            if ix % 8 == 0:
-                self.positions2 += "/"
+            # import ipdb
+            # ipdb.set_trace()
+            if ix % 8 == 0 and ix != 0:
                 if self.pos_temp > 0:
                     self.positions2 += str(self.pos_temp)
-                    self.pos_temp = 0
+                self.positions2 += "/"
+                self.pos_temp = 0
             if not value:
                 self.pos_temp += 1
             else:
-                self.positions2 += value
                 if self.pos_temp > 0:
                     self.positions2 += str(self.pos_temp)
                     self.pos_temp = 0
-            self.prev_value = value
+                self.positions2 += value
+                print(self.positions2)
+        return self.positions2 + ' b KQkq - 0 1'
 
-        return self.positions2
-
-
-
+    def stock_best(self):
+        self.stockfish.set_fen_position(self.curr_fen())
+        self.best_move = self.stockfish.get_best_move_time(10)
+        return self.best_move
 
 
 
 
 
 ruchy = Moves()
-# print(ruchy.curr_position)
-# ruchy.change_position('d2d4')
-# print(ruchy.curr_position)
+
 print(ruchy.curr_fen())
+
+# while True:
+#     ruchy.change_position(input("Jaką pozycje chcesz zmienic: "))
+#     print(ruchy.curr_fen())
+#     print(ruchy.stock_best())
+
 
 
 
