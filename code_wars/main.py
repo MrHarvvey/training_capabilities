@@ -34,6 +34,55 @@ def is_triangle(a, b, c):
     else:
         return True
 
+
 def descending_order(num):
     # Bust a move right here
-    return str(num)[::-1]
+    return int(str("".join(sorted([number for number in str(num)])))[::-1])
+
+
+def open_or_senior(data):
+    """To be a senior, a member must be at least 55 years old and have a handicap greater
+     than 7. In this croquet club, handicaps range from -2 to +26; the better the player the lower the handicap.
+     print(open_or_senior([(45, 12),(55,21),(19, -2),(104, 20)])) """
+    return ["Senior" if word[0] >= 55 and word[1] > 7 else "Open" for word in data]
+
+
+def dna_strand(dna):
+    """In DNA strings, symbols "A" and "T" are complements of each other, as "C" and "G".
+     You have function with one side of the DNA (string, except for Haskell); you need to
+      get the other complementary side. DNA strand is never empty or there is no DNA at all (again, except
+      for Haskell)."""
+    dnas = ""
+    for letter in dna:
+        if letter == "T":
+            dnas += "A"
+        elif letter == "A":
+            dnas += "T"
+        elif letter == "C":
+            dnas += "G"
+        elif letter == "G":
+            dnas += "C"
+        else:
+            dnas += letter
+    return dnas
+
+
+def dna_strand_trans(dna):
+    """In DNA strings, symbols "A" and "T" are complements of each other, as "C" and "G".
+     You have function with one side of the DNA (string, except for Haskell); you need to
+      get the other complementary side. DNA strand is never empty or there is no DNA at all (again, except
+      for Haskell)."""
+    return dna.translate(dna.maketrans("ATCG", "TAGC"))
+
+
+def row_sum_odd_numbers(n):
+    list_number = [number for number in range(n + 1) if number % 2 == 1]
+    ile_liczb = n * (n-2)
+    print(ile_liczb)
+    return list_number
+
+    #your code here
+
+print(row_sum_odd_numbers(4))
+
+
