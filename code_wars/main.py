@@ -76,13 +76,13 @@ def dna_strand_trans(dna):
 
 
 def row_sum_odd_numbers(n):
-    list_number = [number for number in range(n + 1) if number % 2 == 1]
-    ile_liczb = n * (n-2)
-    print(ile_liczb)
-    return list_number
+    liczby = [liczba for liczba in range(n + 1)]
+    suma_liczb = sum(liczby)
+    list_number = [number for number in range(int(suma_liczb + 1)*2) if number % 2 == 1][:-1]
+    return sum(list_number[-n:])
 
+
+def row_sum_odd_numbers2(n):
     #your code here
-
-print(row_sum_odd_numbers(4))
-
+    return n ** 3
 
