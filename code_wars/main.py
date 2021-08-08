@@ -86,3 +86,14 @@ def row_sum_odd_numbers2(n):
     #your code here
     return n ** 3
 
+
+def digital_root(n):
+    """Given n, take the sum of the digits of n. If that value has more than one digit, continue
+    reducing in this way until a single-digit number is produced. The input will be a non-negative integer."""
+    numbers = [int(letter) for letter in str(n)]
+    sum_number = sum(numbers)
+    if len(str(sum_number)) == 1:
+        return sum_number
+    else:
+        return digital_root(sum_number)
+
